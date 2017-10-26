@@ -19,8 +19,7 @@ exports.twoMin = (req, resp) => {
       data += chunk;
     }).on('end', () => {
       const min = minify(data, ext);
-      const size = Buffer.byteLength(min,'utf8');
-      setHeaders(resp, ext, size);
+      setHeaders(resp, ext, Buffer.byteLength(min,'utf8'));
       if (!min) {
         resp.statusCode = 500;
         resp.write('500: Failed to minify');
@@ -54,6 +53,10 @@ function minify(body, ext) {
             return code;
           }
           return res.code;
+        },
+        minifyCSS(code) {
+          res = new CleanCSS().minify(body);
+          return res.styles;
         }
       });
       return res;
