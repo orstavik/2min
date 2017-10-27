@@ -49,13 +49,17 @@ function minify(body, ext) {
         minifyJS(code) {
           res = jsMinify(code);
           if (res.error) {
-            console.log(res.error.stack);
+            console.log(res.error);
             return code;
           }
           return res.code;
         },
         minifyCSS(code) {
-          res = new CleanCSS().minify(body);
+          res = new CleanCSS().minify(code);
+          if (res.errors.length) {
+            console.log(res.errors[0]);
+            return code;
+          };
           return res.styles;
         }
       });
